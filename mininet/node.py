@@ -1180,6 +1180,8 @@ class OVSForest( Switch ):
             self.cmd ( 'iptables -t nat -A POSTROUTING -o "r1" -j MASQUERADE' )
             # Adding route entry in router machine to route packet to specified destination
             self.cmd (' route add -net 10.0.0.0/16 gw 191.168.13.13 dev "r1" ' )
+            quietRun ( 'echo "1" >  /proc/sys/net/ipv4/conf/all/proxy_arp' )
+            quietRun ( 'echo "1" > /proc/sys/net/ipv4/ip_forward')
            
         global counter
         global vxlan_counter

@@ -5,6 +5,18 @@ Mininet: Rapid Prototyping for Software Defined Networks
 
 Version 2.1.0+
 
+### What is OVSForest?
+
+OVSForest emulates a complete network of hosts, links, switches and
+router on a Single machine To create a sample two hosts, and one-switch
+network on differnt namespaces just run:
+
+ `sudo mn`
+
+OVSForest is useful for interactive developement, testing and demos,
+espicially those using OpenFlow and SDN. Vxlan tunneling interfaces 
+are also provided in the Switches for testing tunneling
+
 ### What is Mininet?
 
 Mininet emulates a complete network of hosts, links, and switches
@@ -20,12 +32,12 @@ hardware with minimal changes for full line-rate execution.
 
 ### How does it work?
 
-Mininet creates virtual networks using process-based virtualization
+OVSForest creates virtual networks using process-based virtualization
 and network namespaces - features that are available in recent Linux
-kernels.  In Mininet, hosts are emulated as `bash` processes running in
+kernels.  In OVSForest, hosts are emulated as `bash` processes running in
 a network namespace, so any code that would normally run on a Linux
 server (like a web server or client program) should run just fine
-within a Mininet "Host".  The Mininet "Host" will have its own private
+within a OVSForest "Host".  The OVSForest "Host" will have its own private
 network interface and can only see its own processes.  Switches in
 Mininet are software-based switches like Open vSwitch or the OpenFlow
 reference switch.  Links are virtual ethernet pairs, which live in the

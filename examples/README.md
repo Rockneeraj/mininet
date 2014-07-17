@@ -122,3 +122,9 @@ connectivity using `ping`, for different switch/datapath types.
 
 This example verifies the mininet ofport numbers match up to the ovs port numbers.
 It also verifies that the port numbers match up to the interface numbers
+
+#### ovsforest.py
+
+This examples creates ovs forest topology with two hosts and two switches. 
+It initializes the different instances of OVS switch on different namesspaces
+and connect them to create a topology.
