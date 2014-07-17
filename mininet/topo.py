@@ -260,7 +260,7 @@ class LinearTopo(Topo):
         for i in irange(1, k):
             # Add switch
             switch = self.addSwitch('s%s' % i)
-            self.addLink(router, switch) 
+            self.addLink(router, switch)
             # Add hosts to switch
             for j in irange(1, n):
                 host = self.addHost(genHostName(i, j))

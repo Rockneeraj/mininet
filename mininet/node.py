@@ -60,6 +60,7 @@ from mininet.link import Link, Intf, TCIntf
 from re import findall
 from distutils.version import StrictVersion
 counter=0
+vxlan_counter = 1
 class Node( object ):
     """A virtual network node is simply a shell in a network namespace.
        We communicate with it using pipes."""
@@ -144,6 +145,7 @@ class Node( object ):
         self.lastPid = None
         self.readbuf = ''
         self.waiting = False
+         
 
     def cleanup( self ):
         "Help python collect its garbage."
@@ -1048,7 +1050,7 @@ class OVSForest( Switch ):
         self.cmd('export OVS_RUNDIR=%s' % a )
         #Initialize the configuration database using ovsdb-tool
         self.cmd( 'ovsdb-tool create %s' % a + '/conf.db' + \
-                  ' /home/neeraj/openvswitch-2.0.0/vswitchd/vswitch.ovsschema' )
+                  ' /tmp/vswitch.ovsschema' )
         # Before starting ovs-vswitchd itself, you need to start its
         # configuration database, ovsdb-server.  Each machine/namespace on
         # which OpenvSwitch is installed should run its own copy of ovsdb-server.
@@ -1168,6 +1170,8 @@ class OVSForest( Switch ):
             self.cmd ( 'ovs-vsctl add-port "r1" "ex-veth1" ' )
             # Creating Bridge on host machine 
             quietRun ( 'brctl addbr controller' )
+            quietRun ( 'brctl addbr vxlan' )
+            quietRun ( 'ifconfig vxlan up' )
             # Adding ex-veth0 as a port in "controller"
             quietRun ( 'brctl addif controller ex-veth0' )
             # Adding nat entry in host machine for communication with out side world
@@ -1178,6 +1182,7 @@ class OVSForest( Switch ):
             self.cmd (' route add -net 10.0.0.0/16 gw 191.168.13.13 dev "r1" ' )
            
         global counter
+        global vxlan_counter
         # Creating and assigning IP Addresses to OVS switch in different namespaces
         # IP Address series 192.168.1.1 ~ 192.168.255.1 
         # ( Currently 255 switches are supported ) 
@@ -1194,6 +1199,14 @@ class OVSForest( Switch ):
             # Setting default gateway (router IP )on Switches
             # User must have to change it if changing IP of router
             self.cmd( ' route add default gw 192.168.0.1 ' )
+            quietRun ( 'ip link add vxlan0-%s' % self + ' type veth peer name vxlan1-%s' % self )
+            quietRun ( 'ip link set vxlan1-%s' % self + ' netns mn-%s' % self )
+            quietRun ( 'ip link set dev vxlan0-%s' % self + ' up' )
+            quietRun ( 'ip netns exec mn-%s' % self + ' ip link set dev vxlan1-%s' % self + ' up' )
+            quietRun ( 'ip netns exec mn-%s' % self + ' ifconfig vxlan1-%s' % self + ' 190.168.%s' % vxlan_counter + '.1/16' )
+            vxlan_counter = vxlan_counter + 1
+            quietRun ( 'brctl addif vxlan vxlan0-%s' % self )
+            
         for intf in self.intfList():
             self.TCReapply( intf )
 
@@ -1209,6 +1222,10 @@ class OVSForest( Switch ):
             self.cmd ( 'ovs-vsctl del-br "r1" ')
         # Removing veth pairs
         quietRun ( 'ip link del ex-veth0 type veth peer name ex-veth1' )
+        quietRun ( 'ip link del vxlan0-%s' % self + 'type veth peer name vxlan1-%s' % self )
+        quietRun ( 'brctl delbr controller' )
+        quietRun ( 'brctl delbr vxlan' )
+        
         # Killing vswitchd process
         cmd = ( 'kill -9  %s ' % self.vswitchpid )
         self.cmd ( cmd )
