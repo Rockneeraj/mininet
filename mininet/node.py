@@ -59,7 +59,7 @@ from mininet.moduledeps import moduleDeps, pathCheck, OVS_KMOD, OF_KMOD, TUN
 from mininet.link import Link, Intf, TCIntf
 from re import findall
 from distutils.version import StrictVersion
-counter=0
+counter=1
 vxlan_counter = 1
 class Node( object ):
     """A virtual network node is simply a shell in a network namespace.
@@ -1143,6 +1143,7 @@ class OVSForest( Switch ):
         if self.name == "r0":
             # Adding bridge r1 for external routing
             self.cmd ( 'ovs-vsctl add-br "r1" ' )
+            self.cmd ( 'ifconfig %s' % self + ' 192.168.0.1/16' )
             # COnfiguration of IP address on "r1" bridge 
             self.cmd ( 'ifconfig "r1" 191.168.13.13/16' )
             # Enale proxy_arp configuration
@@ -1188,8 +1189,6 @@ class OVSForest( Switch ):
         # Creating and assigning IP Addresses to OVS switch in different namespaces
         # IP Address series 192.168.1.1 ~ 192.168.255.1 
         # ( Currently 255 switches are supported ) 
-        self.cmd('ifconfig %s' % self + ' 192.168.%s' % counter + '.1/16' )
-        counter = counter + 1
         # Adding one flow entry with all fields wildcarded and action NORMAL
         self.cmd('ovs-ofctl add-flow %s' % self + ' actions=NORMAL')
         # Enabling IP forwarding on switches and router
@@ -1200,12 +1199,19 @@ class OVSForest( Switch ):
         if self.name != "r0":
             # Setting default gateway (router IP )on Switches
             # User must have to change it if changing IP of router
-            self.cmd( ' route add default gw 192.168.0.1 ' )
+            self.cmd ( 'ifconfig %s-eth1' % self + ' 192.168.%s' % counter + '.1/16' )
+            counter = counter + 1
+            self.cmd ( 'echo "1" > /proc/sys/net/ipv4/ip_forward')
+            self.cmd ( 'echo "1" >  /proc/sys/net/ipv4/conf/%s' % self + \
+                       '/proxy_arp')
+        # Enale proxy_arp configuration
+            self.cmd ( 'route add default gw 192.168.0.1 ' )
             quietRun ( 'ip link add vxlan0-%s' % self + ' type veth peer name vxlan1-%s' % self )
             quietRun ( 'ip link set vxlan1-%s' % self + ' netns mn-%s' % self )
             quietRun ( 'ip link set dev vxlan0-%s' % self + ' up' )
             quietRun ( 'ip netns exec mn-%s' % self + ' ip link set dev vxlan1-%s' % self + ' up' )
             quietRun ( 'ip netns exec mn-%s' % self + ' ifconfig vxlan1-%s' % self + ' 190.168.%s' % vxlan_counter + '.1/16' )
+            self.cmd ( 'ovs-vsctl del-port %s' % self + ' %s-eth1' % self )
             vxlan_counter = vxlan_counter + 1
             quietRun ( 'brctl addif vxlan vxlan0-%s' % self )
             

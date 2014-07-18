@@ -21,14 +21,13 @@ def ovsns():
   s2 = net.addSwitch('s2')
 #  c0 = net.addController('c20')
 
-  net.addLink(h1, s1)
   net.addLink(r0, s1)
+  net.addLink(h1, s1)
   net.addLink(r0, s2)
   net.addLink(h2, s2)
-  s1.cmd ('export OVS_RUNDIR=/tmp/mininet-s1/')
-  s1.cmd ('/virtual-network-platform/virtual_network_agent/virtual_network_agent')
 
   net.start()
+  s1.cmd ('export OVS_RUNDIR=/tmp/mininet-s1/;/virtual-network-platform/virtual_network_agent/virtual_network_agent;ps -eaf; env')
   CLI( net )
   net.stop()
 
