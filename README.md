@@ -93,6 +93,8 @@ several new features, including:
 * support for installing the OpenFlow 1.3 versions of the reference
   user switch and NOX from CPqD
 * The ability to import modules from `mininet.examples`
+* Switches and hosts work in different namespaces
+* vxlan interfaces added in switch namespaces
 
 We have provided several new examples (which can easily be
 imported to provide useful functionality) including:
@@ -104,6 +106,10 @@ imported to provide useful functionality) including:
 Note that examples contain experimental features which might
 "graduate" into mainline Mininet in the future, but they should 
 not be considered a stable part of the Mininet API!
+
+### Prerequisite
+
+Brctl module must be there in base machine
 
 ### Installation
 
