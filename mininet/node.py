@@ -1149,7 +1149,7 @@ class OVSForest( Switch ):
             # Enale proxy_arp configuration
             self.cmd ( 'echo "1" >  /proc/sys/net/ipv4/conf/r1/proxy_arp' )
             # Creating veth interfaces for connectiong two bridges
-            self.cmd ( 'ip link add bridge-pair0 type veth peer name \
+            self.cmd ( 'ip link add name bridge-pair0 type veth peer name \
                        bridge-pair1' )
             # Adding bridge-pair0 as a port in "r0"
             self.cmd ( 'ovs-vsctl add-port "r0" bridge-pair0' )
@@ -1160,7 +1160,7 @@ class OVSForest( Switch ):
             self.cmd ( 'ip link set dev bridge-pair1 up' )
             # Creating veth interfaces for communication between host
             # and router namespace
-            quietRun ( 'ip link add ex-veth0 type veth peer name ex-veth1' )
+            quietRun ( 'ip link add name ex-veth0 type veth peer name ex-veth1' )
             # Set one of veth interface on router namespace
             quietRun ( 'ip link set ex-veth1 netns mn-r0' )
             # Bring up the veth interfaces
@@ -1171,7 +1171,9 @@ class OVSForest( Switch ):
             self.cmd ( 'ovs-vsctl add-port "r1" "ex-veth1" ' )
             # Creating Bridge on host machine 
             quietRun ( 'brctl addbr controller' )
+            quietRun ( 'ifconfig controller 191.168.13.12/16' )
             quietRun ( 'brctl addbr vxlan' )
+            quietRun ( 'ifconfig vxlan 190.168.0.1/16' )
             quietRun ( 'ifconfig vxlan up' )
             # Adding ex-veth0 as a port in "controller"
             quietRun ( 'brctl addif controller ex-veth0' )
@@ -1206,7 +1208,7 @@ class OVSForest( Switch ):
                        '/proxy_arp')
         # Enale proxy_arp configuration
             self.cmd ( 'route add default gw 192.168.0.1 ' )
-            quietRun ( 'ip link add vxlan0-%s' % self + ' type veth peer name vxlan1-%s' % self )
+            quietRun ( 'ip link add name vxlan0-%s' % self + ' type veth peer name vxlan1-%s' % self )
             quietRun ( 'ip link set vxlan1-%s' % self + ' netns mn-%s' % self )
             quietRun ( 'ip link set dev vxlan0-%s' % self + ' up' )
             quietRun ( 'ip netns exec mn-%s' % self + ' ip link set dev vxlan1-%s' % self + ' up' )
@@ -1229,9 +1231,11 @@ class OVSForest( Switch ):
             # Deleting bridge "r1"
             self.cmd ( 'ovs-vsctl del-br "r1" ')
         # Removing veth pairs
-        quietRun ( 'ip link del ex-veth0 type veth peer name ex-veth1' )
-        quietRun ( 'ip link del vxlan0-%s' % self + 'type veth peer name vxlan1-%s' % self )
+        quietRun ( 'ip link delete ex-veth0 type veth peer name ex-veth1' )
+        quietRun ( 'ip link delete vxlan0-%s' % self + 'type veth peer name vxlan1-%s' % self )
+        quietRun ( 'ifconfig controller down' )
         quietRun ( 'brctl delbr controller' )
+        quietRun ( 'ifconfig vxlan down' )
         quietRun ( 'brctl delbr vxlan' )
         
         # Killing vswitchd process
@@ -1241,7 +1245,7 @@ class OVSForest( Switch ):
         cmd = ( 'kill -9  %s ' % self.serverpid )
         self.cmd ( cmd )
         if self.datapath == 'user':
-            self.cmd( 'ip link del', self )
+            self.cmd( 'ip link delete', self )
         self.deleteIntfs()
         netns = self.cmd( "ip netns list | egrep -o '^mn-s\w+'" ).split( '\n' )
         for n in netns:
