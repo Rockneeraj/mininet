@@ -29,6 +29,13 @@ network interface and can only see its own processes.  Switches in
 OVSForest are software-based OpenFlow switches Links are virtual ethernet 
 pairs, which live in the Linux kernel and connect our emulated switches 
 to emulated hosts(processes).
+* Controller can be any openflow controller that can be used to manage 
+openflow switches.
+* Router is simply a host that works to manage route between switches
+and controller, It works in a seprate namespace named as mn-r0. Here the 
+name of router r0 is fixed.
+* Switches are the OpenFlow switches that manages the traffic.
+* Hosts are simply nodes to create network topology of Switches and hosts.
 
 ### Features
 
@@ -123,4 +130,5 @@ removed from base machine. So we have to remove them manually.
 * Work in Prototyping stage for a linear topology with 1 control domain
 
 ### Examples
+![Examples](doc/Examples.png)
 
