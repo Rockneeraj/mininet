@@ -1237,6 +1237,7 @@ class OVSForest( Switch ):
         quietRun ( 'brctl delbr controller' )
         quietRun ( 'ifconfig vxlan down' )
         quietRun ( 'brctl delbr vxlan' )
+        quietRun ( 'rm -rf /tmp/mininet* ' )
         
         # Killing vswitchd process
         cmd = ( 'kill -9  %s ' % self.vswitchpid )
