@@ -189,7 +189,7 @@ ovs-vswithcd ovsdb-server and any other process that user launched on nmaespaces
 You can move your openflow controller to external environment using NAT.
 Following architecture shows how we can use NAT to move controller
 
-![Examples](doc/Examples.png)
+![Examples](doc/Domain.png)
 
 If you want to create a user specific topology then `examples/ovsforest.py` 
 can help you to realise the desired topology.
