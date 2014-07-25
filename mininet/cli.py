@@ -101,19 +101,19 @@ class CLI( Cmd ):
         'You may also send a command to a node using:\n'
         '  <node> command {args}\n'
         'For example:\n'
-        '  mininet> h1 ifconfig\n'
+        '  OVSForest> h1 ifconfig\n'
         '\n'
         'The interpreter automatically substitutes IP addresses\n'
         'for node names when a node is the first arg, so commands\n'
         'like\n'
-        '  mininet> h2 ping h3\n'
+        '  OVSForest> h2 ping h3\n'
         'should work.\n'
         '\n'
         'Some character-oriented interactive commands require\n'
         'noecho:\n'
-        '  mininet> noecho h2 vi foo.py\n'
+        '  OVSForest> noecho h2 vi foo.py\n'
         'However, starting up an xterm/gterm is generally better:\n'
-        '  mininet> xterm h2\n\n'
+        '  OVSForest> xterm h2\n\n'
     )
 
     def do_help( self, line ):
