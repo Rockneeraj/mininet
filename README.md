@@ -64,8 +64,15 @@ name of router r0 is fixed.
     *** Starting CLI:
     OVSForest>
 ```
+Topology would be:
 
-![Features](doc/default.png)
+    OVSForest>
+    h1 h1-eth0:s1-eth2
+    h2 h2-eth0:s1-eth3
+    r0 r0-eth1:s1-eth1
+    s1 s1-eth1:r0-eth1 s1-eth2:h1-eth0 s1-eth3:h2-eth0
+    c0
+
 
 * A handy Python API for creating networks of varying sizes and
   topologies.
@@ -82,10 +89,10 @@ name of router r0 is fixed.
   diagnostic commands (like `iperf` and `ping`), as well as the
   ability to run a command to a node. For example,
 
-  `OVSForest> help`
-![Features](doc/help.png)
+  `OVSForest> help` will show the documented commands
 
-  `OVSForest> help
+```
+   OVSForest> help
 
   Documented commands (type help <topic>):
   ========================================
@@ -109,21 +116,10 @@ name of router r0 is fixed.
     OVSForest> noecho h2 vi foo.py
   However, starting up an xterm/gterm is generally better:
     OVSForest> xterm h2
-
-  OVSForest>`
+```
 
   `OVSForest> h1 ifconfig -a`
   tells host h11 to run the command `ifconfig -a`
-
-  `OVSForest net`
-   shows the topology, below is the output of default topology
-   `OVSForest> net
-   h1 h1-eth0:s1-eth2
-   h2 h2-eth0:s1-eth3
-   r0 r0-eth1:s1-eth1
-   s1 s1-eth1:r0-eth1 s1-eth2:h1-eth0 s1-eth3:h2-eth0
-   c0
-   OVSForest>`
 
 
 * A "cleanup" command to get rid of junk (interfaces, processes, files
