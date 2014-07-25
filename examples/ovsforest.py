@@ -30,11 +30,11 @@ def ovsns():
   s1.cmd ('ovs-vsctl set-controller "s1" tcp:10.0.17.23:6653')
   s2.cmd ('ovs-vsctl set-controller "s2" tcp:10.0.17.23:6653')
   
-  s1.cmd ('export OVS_RUNDIR=/tmp/mininet-s1/;/virtual-network-platform/virtual_network_agent/virtual_network_agent  --log-file=/var/log/virtual_network_agent1.log --config-file=/virtual-network-platform/virtual_network_agent/tunnel_endpoint_configure.yml --debug;ps -eaf; env')
+  s1.cmd ('export OVS_RUNDIR=/tmp/mininet-s1/;/virtual-network-platform/virtual_network_agent/virtual_network_agent  --log-file=/var/log/virtual_network_agent1.log --config-file=/virtual-network-platform/virtual_network_agent/tunnel_endpoint_configure.yml ;ps -eaf; env')
   #a = 'cp /virtual-network-platform/virtual_network_agent/tunnel_endpoint_configure1.yml tunnel_endpoint_configure.yml'
   #print a 
   #quietRun ( 'cp /virtual-network-platform/virtual_network_agent/tunnel_endpoint_configure1.yml /virtual-network-platform/virtual_network_agent/tunnel_endpoint_configure.yml' )
-  s2.cmd ('export OVS_RUNDIR=/tmp/mininet-s2/;/virtual-network-platform/virtual_network_agent/virtual_network_agent --log-file=/var/log/virtual_network_agent2.log --config-file=/virtual-network-platform/virtual_network_agent/tunnel_endpoint_configure1.yml --debug;ps -eaf; env')
+  s2.cmd ('export OVS_RUNDIR=/tmp/mininet-s2/;/virtual-network-platform/virtual_network_agent/virtual_network_agent  --config-file=/virtual-network-platform/virtual_network_agent/tunnel_endpoint_configure1.yml --log-file=/var/log/virtual_network_agent2.log; ps -eaf; env')
   CLI( net )
   net.stop()
 
