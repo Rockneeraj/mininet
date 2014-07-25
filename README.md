@@ -46,21 +46,7 @@ name of router r0 is fixed.
 
 * A command-line launcher (`ovsforest`) to instantiate networks.
 Default network will be
-Creating network
-Adding controller
-Adding hosts and Router:
-h1 h2
-Adding switches:
-r0 s1
-Adding links:
-(h1, s1) (h2, s1) (r0, s1)
-Configuring hosts and Router
-h1 h2
-Starting controller
-Starting 2 switches
-r0 s1
-Starting CLI:
-OVSForest> 
+![Features](doc/default.png)
 
 * A handy Python API for creating networks of varying sizes and
   topologies.
@@ -78,39 +64,14 @@ OVSForest>
   ability to run a command to a node. For example,
 
   `OVSForest> help`
-Documented commands
-EOF    exit   intfs     link   noecho       pingpair      py    source  xterm
-dpctl  gterm  iperf     net    pingall      pingpairfull  quit  time
-dump   help   iperfudp  nodes  pingallfull  px            sh    x
-
-You may also send a command to a node using:
-  <node> command {args}
-For example:
-  OVSForest> h1 ifconfig
-
-The interpreter automatically substitutes IP addresses
-for node names when a node is the first arg, so commands
-like
-  OVSForest> h2 ping h3
-should work.
-
-Some character-oriented interactive commands require
-noecho:
-  OVSForest> noecho h2 vi foo.py
-However, starting up an xterm/gterm is generally better:
-  OVSForest> xterm h2
+![Features](doc/help.png)
 
   `OVSForest> h1 ifconfig -a`
   tells host h11 to run the command `ifconfig -a`
 
   `OVSForest net`
    shows the topology, below is the output of default topology
-
-h1 h1-eth0:s1-eth2
-h2 h2-eth0:s1-eth3
-r0 r0-eth1:s1-eth1
-s1 s1-eth1:r0-eth1 s1-eth2:h1-eth0 s1-eth3:h2-eth0
-c0
+![Features](doc/net.png)
 
 
 * A "cleanup" command to get rid of junk (interfaces, processes, files
