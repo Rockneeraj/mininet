@@ -45,22 +45,23 @@ name of router r0 is fixed.
 * vxlan interfaces added in switch namespaces
 
 * A command-line launcher (`ovsforest`) to instantiate networks.
-  Default network will be
-  `*** Creating network\n
-  *** Adding controller\n
-  *** Adding hosts and Router:\n
-  h1 h2`
-  `*** Adding switches:`
-  `r0 s1`
-  `*** Adding links:`
-  `(h1, s1) (h2, s1) (r0, s1)`
-  `*** Configuring hosts and Router`
-  `h1 h2`
-  `*** Starting controller`
-  `*** Starting 2 switches`
-  `r0 s1`
-  `*** Starting CLI:`
-  `OVSForest>`
+  Default network would be:
+
+    *** Creating network\n
+    *** Adding controller\n
+    *** Adding hosts and Router:\n
+    h1 h2
+    *** Adding switches:
+    r0 s1
+    *** Adding links:
+    (h1, s1) (h2, s1) (r0, s1)
+    *** Configuring hosts and Router
+    h1 h2
+    *** Starting controller
+    *** Starting 2 switches
+    r0 s1
+    *** Starting CLI:
+    OVSForest>
 
 ![Features](doc/default.png)
 
