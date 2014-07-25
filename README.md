@@ -144,8 +144,11 @@ API, create switch by `addSwitch` API and link them in a way he wants using
 and then connect the switches with the host.
 * Name of the router `r0` is fixed in the code so we must have to use the same.
 
-
-
+###Future Plans
+Following are the work on which ovsforest team is currently focused
+* Deploy Virtual Network agent `https://github.com/trema/virtual-network-platform`
+on OVS switches
+* Delopy neutron agent ( Openstack ) on OVS swithces
 
 
 
