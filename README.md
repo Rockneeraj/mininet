@@ -47,9 +47,10 @@ name of router r0 is fixed.
 * A command-line launcher (`ovsforest`) to instantiate networks.
   Default network would be:
 
-    *** Creating network\n
-    *** Adding controller\n
-    *** Adding hosts and Router:\n
+```
+    *** Creating network
+    *** Adding controller
+    *** Adding hosts and Router:
     h1 h2
     *** Adding switches:
     r0 s1
@@ -62,6 +63,7 @@ name of router r0 is fixed.
     r0 s1
     *** Starting CLI:
     OVSForest>
+```
 
 ![Features](doc/default.png)
 
