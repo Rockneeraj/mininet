@@ -12,7 +12,7 @@ OVSForest is useful for interactive developement, testing and demos,
 espicially those using OpenFlow and SDN on large scale networks.
 
 ### System architecture
-![System architecture](doc/architecture.png)
+![System architecture](doc/architect.png)
 
 
 ### How does it work?
