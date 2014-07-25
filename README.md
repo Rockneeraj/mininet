@@ -44,7 +44,23 @@ name of router r0 is fixed.
 * Switches and hosts work in different namespaces
 * vxlan interfaces added in switch namespaces
 
-* A command-line launcher (`mn`) to instantiate networks.
+* A command-line launcher (`ovsforest`) to instantiate networks.
+Default network will be
+Creating network
+Adding controller
+Adding hosts and Router:
+h1 h2
+Adding switches:
+r0 s1
+Adding links:
+(h1, s1) (h2, s1) (r0, s1)
+Configuring hosts and Router
+h1 h2
+Starting controller
+Starting 2 switches
+r0 s1
+Starting CLI:
+OVSForest> 
 
 * A handy Python API for creating networks of varying sizes and
   topologies.
@@ -55,21 +71,53 @@ name of router r0 is fixed.
   object.  For example, a linear network may be created with the
   command:
 
-  `mn --topo linear,3`
+  `ovsforest --topo linear,3`
 
 * A command-line interface (`CLI` class) which provides useful
   diagnostic commands (like `iperf` and `ping`), as well as the
   ability to run a command to a node. For example,
 
-  `mininet> h11 ifconfig -a`
+  `OVSForest> help`
+Documented commands
+EOF    exit   intfs     link   noecho       pingpair      py    source  xterm
+dpctl  gterm  iperf     net    pingall      pingpairfull  quit  time
+dump   help   iperfudp  nodes  pingallfull  px            sh    x
 
+You may also send a command to a node using:
+  <node> command {args}
+For example:
+  OVSForest> h1 ifconfig
+
+The interpreter automatically substitutes IP addresses
+for node names when a node is the first arg, so commands
+like
+  OVSForest> h2 ping h3
+should work.
+
+Some character-oriented interactive commands require
+noecho:
+  OVSForest> noecho h2 vi foo.py
+However, starting up an xterm/gterm is generally better:
+  OVSForest> xterm h2
+
+  `OVSForest> h1 ifconfig -a`
   tells host h11 to run the command `ifconfig -a`
+
+  `OVSForest net`
+   shows the topology, below is the output of default topology
+
+h1 h1-eth0:s1-eth2
+h2 h2-eth0:s1-eth3
+r0 r0-eth1:s1-eth1
+s1 s1-eth1:r0-eth1 s1-eth2:h1-eth0 s1-eth3:h2-eth0
+c0
+
 
 * A "cleanup" command to get rid of junk (interfaces, processes, files
   in /tmp, etc.) which might be left around by Mininet or Linux. Try
   this if things stop working!
 
-  `mn -c`
+  `ovsforest -c`
 
 ### How to use?
 
