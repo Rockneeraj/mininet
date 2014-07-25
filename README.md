@@ -4,14 +4,12 @@ OVSForest: To realise large scale Networks
 ### What is OVSForest?
 
 OVSForest emulates a complete network of hosts, links, switches and
-router on a Single machine To create a sample two hosts, and one-switch
-network on differnt namespaces just run:
-
- `sudo mn`
+router on a Single machine to realise large scale networks. It executes
+seprate service of ovs-vswitchd with corresponding ovsdb-server on different 
+named network namespaces.
 
 OVSForest is useful for interactive developement, testing and demos,
-espicially those using OpenFlow and SDN. Vxlan tunneling interfaces 
-are also provided in the Switches for testing tunneling
+espicially those using OpenFlow and SDN on large scale networks.
 
 ### System architecture
 ![System architecture](doc/architecture.png)
@@ -53,7 +51,6 @@ name of router r0 is fixed.
 
 * Examples (in the `examples/ovsforest.py` directory) to help you get started.
 
-
 * Parametrized topologies (`Topo` subclasses) using the Mininet
   object.  For example, a linear network may be created with the
   command:
@@ -85,10 +82,10 @@ The following operating system is only supported.
 * Brctl module must be there in base machine
   `apt-get install bridge-utils`
 * Create one network name space by
-   `ip netns create NAME`
-* Openvswitch Switch must be installed
-
-##### OpenFlow Switch
+  `ip netns create NAME`
+If user doesn't perform this step then cgroups will not get loaded 
+and any attempt by the ovsforest to create namespace will fail.
+* Open Flow Switch must be installed
 
 OpenFlow Switch is unmodified Open vSwitch (version 2.0.X). It is not
 included in this software suite. For detailed information on Open
@@ -101,7 +98,7 @@ vSwitch, please visit [http://openvswitch.org/](http://openvswitch.org/).
 
 * Download OVSForest Source code from git
 * install source code by 
-  `util/install -n`
+  `util/install -a` or `util\install.sh -n`
 * Set IPv4 forwarding and proxy arp on host machine to enable host machine
 to talk to switches ( if not configured )
    `/proc/sys/net/ipv4/conf/r1/proxy_arp`
@@ -122,6 +119,8 @@ interfaces manually, that didn't get removed from host even after
 successful exit.
 * It is already obseved that sometimes interfaces of vxlan plane are not
 removed from base machine. So we have to remove them manually.
+* If by any reason the process terminates then you manually have to kill 
+ovs-vswithcd ovsdb-server and any other process that user launched on nmaespaces. 
 
 ### Limitations
 
@@ -130,5 +129,26 @@ removed from base machine. So we have to remove them manually.
 * Work in Prototyping stage for a linear topology with 1 control domain
 
 ### Examples
+You can move your openflow controller to external environment using NAT.
+Following architecture shows how we can use NAT to move controller
+
 ![Examples](doc/Examples.png)
+
+If you want to create a user specific topology then `examples/ovsforest.py` 
+can help you to realise the desired topology.
+Let say a experimenter want to create a topology with 3 switches with each 
+switch connected to 5 hosts. Then he simply have to create host by `addHost` 
+API, create switch by `addSwitch` API and link them in a way he wants using 
+`addLink` API.
+* While using this file first connect router with the swithes as the first link 
+and then connect the switches with the host.
+* Name of the router `r0` is fixed in the code so we must have to use the same.
+
+
+
+
+
+
+
+
 
